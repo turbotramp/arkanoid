@@ -24,23 +24,31 @@ class Block:
     def __init__(self, x):
         self.x = x
         self.y = 10
-
+        self.area = []
+        for p in range(Block.length):
+            self.area.append(self.x + p)
 
 
 class Paddle:
     def __init__(self):
+        self.jumpsize = 5
         self.x = 270
         self.y = 370
-        self.width = 60
+        self.length = 60
         self.height = 10
         self.color = (64, 255, 32)
+        self.area = []
+
+    def calculatePosition(self):
+        self.area = []
+        for p in range(self.length):
+            self.area.append(self.x + p)
 
 
 #Initialize objects
 done = False
 ball = Ball()
 paddle = Paddle()
-jump_size = 5
 blocks = []
 for b in range(10):
     block = Block(b*60)
@@ -56,7 +64,6 @@ screen = pygame.display.set_mode((600, 400))
 
 while not done:
     pressed = pygame.key.get_pressed()
-    rectArea = []
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
@@ -66,18 +73,16 @@ while not done:
     for b in blocks:
         pygame.draw.rect(screen, b.color, pygame.Rect(b.x, b.y, b.length, b.width))
 
-
     pygame.draw.rect(screen, paddle.color, pygame.Rect(paddle.x, paddle.y, 60, 10))
-    if pressed[pygame.K_LEFT]: paddle.x -= jump_size
-    if pressed[pygame.K_RIGHT]: paddle.x += jump_size
-    for i in range(60):
-        rectArea.append(paddle.x + i)
-    print(rectArea)
+    paddle.calculatePosition()
+    if pressed[pygame.K_LEFT]: paddle.x -= paddle.jumpsize
+    if pressed[pygame.K_RIGHT]: paddle.x += paddle.jumpsize
+
 
     pygame.draw.circle(screen, ball.color, (ball.x, ball.y), ball.size)
 
     ball.move(ball.direction)
-    if (ball.y == paddle.y and ball.x in rectArea):
+    if (ball.y == paddle.y and ball.x in paddle.area):
         ball.changeDirection()
     if(ball.y == 18):
         ball.changeDirection()
