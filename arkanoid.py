@@ -2,19 +2,30 @@ from random import randint
 import pygame
 
 
-class Ball:
-    direction = -1
+
+class PlayFrame:
     def __init__(self):
+        self.area = []
+
+
+class Ball:
+    def __init__(self):
+        self.yVelocity = -2
+        self.xVelocity = 1
         self.x = 270
         self.y = 368
         self.size = 4
         self.color = (128, 128, 0)
 
     def move(self, direction):
-        self.y += direction
+        self.y += self.yVelocity
+        self.x += self.xVelocity
 
-    def changeDirection(self):
-        Ball.direction *= -1
+    def changeDirectionY(self):
+        self.yVelocity *= -1
+
+    def changeDirectionX(self):
+        self.xVelocity *= -1
 
 
 class Block:
@@ -81,11 +92,15 @@ while not done:
 
     pygame.draw.circle(screen, ball.color, (ball.x, ball.y), ball.size)
 
-    ball.move(ball.direction)
+    ball.move(ball.yVelocity)
     if (ball.y == paddle.y and ball.x in paddle.area):
-        ball.changeDirection()
+        ball.changeDirectionY()
+
     if(ball.y == 18):
-        ball.changeDirection()
+        ball.changeDirectionY()
+
+    if (ball.x == 0 or ball.x == 600):
+        ball.changeDirectionX()
 
 
     clock.tick(200)
