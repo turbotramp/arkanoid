@@ -17,7 +17,7 @@ class Ball:
         self.size = 4
         self.color = (128, 128, 0)
 
-    def move(self, direction):
+    def move(self):
         self.y += self.yVelocity
         self.x += self.xVelocity
 
@@ -42,7 +42,7 @@ class Block:
 
 class Paddle:
     def __init__(self):
-        self.jumpsize = 5
+        self.jumpsize = 2
         self.x = 270
         self.y = 370
         self.length = 60
@@ -85,23 +85,39 @@ while not done:
         pygame.draw.rect(screen, b.color, pygame.Rect(b.x, b.y, b.length, b.width))
 
     pygame.draw.rect(screen, paddle.color, pygame.Rect(paddle.x, paddle.y, 60, 10))
-    paddle.calculatePosition()
     if pressed[pygame.K_LEFT]: paddle.x -= paddle.jumpsize
     if pressed[pygame.K_RIGHT]: paddle.x += paddle.jumpsize
 
 
     pygame.draw.circle(screen, ball.color, (ball.x, ball.y), ball.size)
 
-    ball.move(ball.yVelocity)
+    paddle.calculatePosition()
+    ball.move()
+
     if (ball.y == paddle.y and ball.x in paddle.area):
+        ball.changeDirectionY()
+        if ball.x < paddle.area[20]:
+            ball.xVelocity = -1
+            print(ball.x, paddle.area[20], paddle.area[40], paddle.area[59])
+        elif ball.x < 40:
+            ball.xVelocity = 0
+            print(ball.x, paddle.area[20], paddle.area[40], paddle.area[59])
+        elif ball.x < 59:
+            ball.xVelocity = 1
+            print(ball.x, paddle.area[20], paddle.area[40], paddle.area[59])
+
+    if(ball.y == 0):
         ball.changeDirectionY()
 
     if(ball.y == 18):
-        ball.changeDirectionY()
+        for b in blocks:
+            if ball.x in b.area:
+                blocks.remove(b)
+        ball.changeDirectionY
 
     if (ball.x == 0 or ball.x == 600):
         ball.changeDirectionX()
 
 
-    clock.tick(200)
+    clock.tick(150)
     pygame.display.flip()
