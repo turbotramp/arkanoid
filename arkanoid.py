@@ -21,6 +21,11 @@ class Ball:
         self.y += self.yVelocity
         self.x += self.xVelocity
 
+    def move2(self):
+        if self.x % 2 == 0:
+            self.x += self.xVelocity
+        self.y += self.yVelocity
+
     def changeDirectionY(self):
         self.yVelocity *= -1
 
@@ -93,18 +98,15 @@ while not done:
 
     paddle.calculatePosition()
     ball.move()
-
     if (ball.y == paddle.y and ball.x in paddle.area):
-        ball.changeDirectionY()
-        if ball.x < paddle.area[20]:
+        print(ball.x, paddle.area[0])
+        if ball.x >= paddle.area[0] and ball.x < paddle.area[20]:
             ball.xVelocity = -1
-            print(ball.x, paddle.area[20], paddle.area[40], paddle.area[59])
-        elif ball.x < 40:
+        elif ball.x >= paddle.area[20] and ball.x < paddle.area[40]:
             ball.xVelocity = 0
-            print(ball.x, paddle.area[20], paddle.area[40], paddle.area[59])
-        elif ball.x < 59:
+        elif ball.x >= paddle.area[40] and ball.x < paddle.area[59]:
             ball.xVelocity = 1
-            print(ball.x, paddle.area[20], paddle.area[40], paddle.area[59])
+        ball.changeDirectionY()
 
     if(ball.y == 0):
         ball.changeDirectionY()
@@ -119,5 +121,5 @@ while not done:
         ball.changeDirectionX()
 
 
-    clock.tick(150)
+    clock.tick(200)
     pygame.display.flip()
