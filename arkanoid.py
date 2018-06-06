@@ -10,6 +10,7 @@ class PlayFrame:
 
 class Ball:
     def __init__(self):
+        self.whichMove = 1
         self.yVelocity = -2
         self.xVelocity = 1
         self.x = 270
@@ -22,7 +23,12 @@ class Ball:
         self.x += self.xVelocity
 
     def move2(self):
-        if self.x % 2 == 0:
+        if self.y % 2 == 0:
+            self.x += self.xVelocity
+        self.y += self.yVelocity
+
+    def move3(self):
+        if self.y % 3 == 0:
             self.x += self.xVelocity
         self.y += self.yVelocity
 
@@ -97,15 +103,30 @@ while not done:
     pygame.draw.circle(screen, ball.color, (ball.x, ball.y), ball.size)
 
     paddle.calculatePosition()
-    ball.move()
+
+    if ball.whichMove == 1:
+        ball.move()
+    elif ball.whichMove == 2:
+        ball.move2()
+    elif ball.whichMove == 3:
+        ball.move3()
+        print(ball.whichMove)
     if (ball.y == paddle.y and ball.x in paddle.area):
-        print(ball.x, paddle.area[0])
-        if ball.x >= paddle.area[0] and ball.x < paddle.area[20]:
+        if ball.x >= paddle.area[0] and ball.x < paddle.area[10]:
             ball.xVelocity = -1
-        elif ball.x >= paddle.area[20] and ball.x < paddle.area[40]:
+            ball.whichMove = 2
+        elif ball.x >= paddle.area[10] and ball.x < paddle.area[25]:
+            ball.xVelocity = -1
+            ball.whichMove = 3
+        elif ball.x >= paddle.area[25] and ball.x < paddle.area[35]:
             ball.xVelocity = 0
+            ball.whichMove = 1
+        elif ball.x >= paddle.area[35] and ball.x < paddle.area[49]:
+            ball.xVelocity = 1
+            ball.whichMove = 3
         elif ball.x >= paddle.area[40] and ball.x < paddle.area[59]:
             ball.xVelocity = 1
+            ball.whichMove = 2
         ball.changeDirectionY()
 
     if(ball.y == 0):
