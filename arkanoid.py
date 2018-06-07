@@ -42,13 +42,21 @@ class Ball:
 class Block:
     length = 50
     width = 10
-    color = (200, 50, 20)
     def __init__(self, x):
         self.x = x
         self.y = 10
+        self.punchesLeft = 2
+        self.color = (200, 50, 20)
         self.area = []
         for p in range(Block.length):
             self.area.append(self.x + p)
+
+    def decreasePunches(self):
+        self.punchesLeft -= 1
+        if self.punchesLeft == 1:
+            self.color = (50, 50, 200)
+        if self.punchesLeft == 0:
+            self.color = (200, 200, 50)
 
 
 class Paddle:
@@ -83,7 +91,7 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((600, 400))
 
 
-
+## mainloop ##
 while not done:
     pressed = pygame.key.get_pressed()
     for event in pygame.event.get():
@@ -134,8 +142,10 @@ while not done:
     if(ball.y == 18):
         for b in blocks:
             if ball.x in b.area:
-                blocks.remove(b)
-        ball.changeDirectionY
+                if b.punchesLeft == 0:
+                    blocks.remove(b)
+                b.decreasePunches()
+                ball.changeDirectionY()
 
     if (ball.x == 0 or ball.x == 600):
         ball.changeDirectionX()
