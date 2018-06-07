@@ -110,7 +110,6 @@ while not done:
         ball.move2()
     elif ball.whichMove == 3:
         ball.move3()
-        print(ball.whichMove)
     if (ball.y == paddle.y and ball.x in paddle.area):
         if ball.x >= paddle.area[0] and ball.x < paddle.area[10]:
             ball.xVelocity = -1
